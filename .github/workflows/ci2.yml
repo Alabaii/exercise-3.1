@@ -50,8 +50,6 @@ jobs:
           docker run -d --name api-tests-container api-tests
           echo "Waiting for Allure Report to generate"
           sleep 60  # Даем время на генерацию отчета
-      - name: List files in container
-        run: docker run --rm -v $GITHUB_WORKSPACE:/app api-tests ls -l /app
       - name: Upload Allure Report
         uses: actions/upload-artifact@v3
         with:
