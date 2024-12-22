@@ -50,7 +50,9 @@ jobs:
           docker run -p 8080:40457 api-tests
           echo "Waiting for Allure Report to generate"
           sleep 60  # Даем время на генерацию отчета
-
+      - name: Access Allure Report
+        run: |
+          curl http://localhost:8080
       - name: Upload Allure Report
         uses: actions/upload-artifact@v3
         with:
