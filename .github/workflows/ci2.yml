@@ -47,7 +47,7 @@ jobs:
 
       - name: Run Docker container
         run: |
-          docker run -p 8080:40457 api-tests
+          docker run -d --name api-tests-container api-tests
           echo "Waiting for Allure Report to generate"
           sleep 60  # Даем время на генерацию отчета
       - name: Upload Allure Report
