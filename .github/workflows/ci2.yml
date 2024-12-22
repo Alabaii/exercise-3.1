@@ -1,0 +1,58 @@
+name: Run API Tests and Generate Allure Report
+
+on:
+  schedule:
+    - cron: '0 0 * * *'  # Каждый день в 00:00
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Set up JDK 21
+        uses: actions/setup-java@v3
+        with:
+          java-version: '21'
+          distribution: 'temurin'
+
+      - name: Set up Docker
+        uses: docker/setup-buildx-action@v2
+
+      - name: Cache Maven dependencies
+        uses: actions/cache@v3
+        with:
+          path: ~/.m2/repository
+          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+          restore-keys: |
+            ${{ runner.os }}-maven-
+
+      - name: Build and test with Maven
+        run: |
+          echo "Building and running tests"
+          mvn clean install -Dmaven.test.failure.ignore=true
+
+      - name: Build Docker image
+        run: |
+          docker build -t api-tests .
+
+      - name: Run Docker container
+        run: |
+          docker run -p 8080:40457 api-tests
+          echo "Waiting for Allure Report to generate"
+          sleep 60  # Даем время на генерацию отчета
+
+      - name: Upload Allure Report
+        uses: actions/upload-artifact@v3
+        with:
+          name: allure-report
+          path: /tmp/allure-report  # Путь к отчету
