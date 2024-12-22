@@ -1,0 +1,35 @@
+on:
+  schedule:
+    - cron: "0 0 * * *"  # Это настроит запуск раз в день в полночь UTC
+  workflow_dispatch:  # Это позволяет запускать вручную из GitHub Actions UI
+
+jobs:
+  build:
+    runs-on: ubuntu-latest  # Используем Ubuntu для выполнения работы
+
+    steps:
+      # Проверяем исходный код репозитория
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      # Устанавливаем Docker
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+
+      # Собираем Docker-образ
+      - name: Build Docker image
+        run: |
+          docker build -t api-tests .
+
+      # Запускаем контейнер с тестами
+      - name: Run tests in Docker container
+        run: |
+          docker run -p 8080:40457 api-tests
+          docker logs api-tests-container
+
+      # (Опционально) Загружаем Allure-отчет как артефакт
+      - name: Upload Allure report as artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: allure-report
+          path: target/allure-results
