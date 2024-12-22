@@ -54,4 +54,4 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: allure-report
-          path: /target # Путь к отчету
+          path: /app/target/site # Путь к отчету
