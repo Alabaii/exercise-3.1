@@ -29,7 +29,7 @@ jobs:
 
       # (Опционально) Загружаем Allure-отчет как артефакт
       - name: Upload Allure report as artifact
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: allure-report
           path: target/allure-results
