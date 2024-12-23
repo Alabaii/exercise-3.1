@@ -32,4 +32,5 @@ COPY --from=build-stage /app/target/allure-results /app/allure-results
 EXPOSE 40457
 
 # Запускаем Allure Report на фиксированном порту 40457
-ENTRYPOINT ["allure", "report", "/app/allure-results", "--port", "40457"]
+#ENTRYPOINT ["allure", "report", "/app/allure-results", "--port", "40457"]
+ENTRYPOINT ["allure", "generate", "/app/allure-results", "--clean", "-o", "/app/allure-report"]

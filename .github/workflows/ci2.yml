@@ -50,8 +50,12 @@ jobs:
           docker run -d --name api-tests-container api-tests
           echo "Waiting for Allure Report to generate"
           sleep 60  # Даем время на генерацию отчета
+      - name: Copy Allure Report from container
+        run: |
+          docker cp api-tests-container:/app/allure-report ./allure-report
+
       - name: Upload Allure Report
         uses: actions/upload-artifact@v3
         with:
           name: allure-report
-          path: app  # Путь к отчету
+          path: ./allure-report
