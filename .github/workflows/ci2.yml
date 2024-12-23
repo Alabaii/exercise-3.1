@@ -55,7 +55,7 @@ jobs:
           docker cp api-tests-container:/app/allure-report ./allure-report
 
       - name: Upload Allure Report
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: allure-report
           path: ./allure-report
