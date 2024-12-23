@@ -49,7 +49,7 @@ jobs:
         run: |
           docker run -d --name api-tests-container api-tests
           echo "Waiting for Allure Report to generate"
-          sleep 60  # Даем время на генерацию отчета
+          sleep 20  # Даем время на генерацию отчета
       - name: Copy Allure Report from container
         run: |
           docker cp api-tests-container:/app/allure-report ./allure-report
